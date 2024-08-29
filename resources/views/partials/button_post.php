@@ -1,5 +1,6 @@
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#postModal">
-    Post!
+<!-- resources/views/partials/button_post.blade.php -->
+<button type="button" class="fab-button fab" data-bs-toggle="modal" data-bs-target="#postModal">
+    +
 </button>
 
 <div class="modal fade" id="postModal" tabindex="-1" aria-labelledby="postModalLabel" aria-hidden="true">
@@ -26,7 +27,7 @@
                         <textarea class="form-control @error('body') is-invalid @enderror" id="body" name="body" rows="3" required>{{ old('body') }}</textarea>
                         @error('body')
                         <div class="invalid-feedback">
-                        {{ $message }}
+                            {{ $message }}
                         </div>
                         @enderror
                     </div>

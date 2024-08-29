@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AccountController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,3 +22,9 @@ Route::resource('posts', PostController::class)->except(['index']);
 
 // Rota principal para exibir posts na home
 Route::get('/home', [PostController::class, 'index'])->name('home');
+
+// Página de configurações de conta
+Route::get('/account/settings', [AccountController::class, 'settings'])->name('account.settings');
+
+// Atualização das configurações de conta
+Route::put('/account/update', [AccountController::class, 'update'])->name('account.update');
