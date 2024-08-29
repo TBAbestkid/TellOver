@@ -10,10 +10,14 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::latest()->get(); // Pega os posts mais recentes
+        // Recupera todos os posts mais recentes
+        $posts = Post::latest()->get();
+
+        //dd($posts); // Debugging: para ver se os posts estão sendo recuperados
+
+        // Retorna a view 'home' com a variável $posts
         return view('home', compact('posts'));
     }
-    
     
     // Armazena um novo post
     public function store(Request $request)
