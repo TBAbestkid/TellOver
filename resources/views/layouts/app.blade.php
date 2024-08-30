@@ -34,6 +34,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
+                <!-- Botão para abrir o menu offcanvas em telas maiores -->
                 <button class="navbar-toggler d-none d-md-block" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu" aria-expanded="false" aria-label="{{ __('Toggle menu') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -44,7 +45,6 @@
 
                     <!-- Lado Direito da Barra de Navegação -->
                     <ul class="navbar-nav ms-auto">
-                        <!-- Links de Autenticação -->
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
@@ -58,39 +58,30 @@
                                 </li>
                             @endif
                         @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('account.settings') }}">{{ __('Settings') }}</a>
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault();
-                                                    document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
+                            <!-- Remova o dropdown daqui -->
                         @endguest
                     </ul>
                 </div>
             </div>
         </nav>
 
-        <!-- Menu Offcanvas -->
-        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
+         <!-- Menu Offcanvas -->
+         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menu</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-                <!-- Adicione itens do menu aqui -->
                 <ul class="nav flex-column">
+                    @auth
+                        <!-- Nome do usuário logado -->
+                        <li class="nav-item">
+                            <span class="nav-link">{{ Auth::user()->name }}</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Perfil</a> <!-- Link de perfil, ajuste conforme necessário -->
+                        </li>
+                    @endauth
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/') }}">{{ __('Home') }}</a>
                     </li>
