@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\ProfileController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,3 +30,13 @@ Route::get('/account/settings', [AccountController::class, 'settings'])->name('a
 
 // Atualização das configurações de conta
 Route::put('/account/update', [AccountController::class, 'update'])->name('account.update');
+
+// para as futuras pesquisas nér
+Route::get('/search', [SearchController::class, 'search'])->name('search');
+
+Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+
+Route::middleware('auth')->group(function () {
+    // Rota para a página de perfil
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+});

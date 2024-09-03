@@ -58,6 +58,13 @@
                                 </li>
                             @endif
                         @else
+                            <!-- Adicione um formulário de pesquisa -->
+                            <li class="nav-item">
+                                <form class="d-flex" action="{{ route('search') }}" method="GET">
+                                    <input class="form-control me-2" type="search" name="query" placeholder="Pesquisar" aria-label="Search">
+                                    <button class="btn btn-outline-success" type="submit">Pesquisar</button>
+                                </form>
+                            </li>
                             <!-- Remova o dropdown daqui -->
                         @endguest
                     </ul>
@@ -65,8 +72,8 @@
             </div>
         </nav>
 
-         <!-- Menu Offcanvas -->
-         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
+        <!-- Menu Offcanvas -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menu</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -74,12 +81,11 @@
             <div class="offcanvas-body">
                 <ul class="nav flex-column">
                     @auth
-                        <!-- Nome do usuário logado -->
                         <li class="nav-item">
                             <span class="nav-link">{{ Auth::user()->name }}</span>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Perfil</a> <!-- Link de perfil, ajuste conforme necessário -->
+                            <a class="nav-link" href="{{ route('profile.show') }}">{{ __('Profile') }}</a>
                         </li>
                     @endauth
                     <li class="nav-item">
@@ -108,6 +114,7 @@
                 </ul>
             </div>
         </div>
+
 
 
         <main class="py-4">
