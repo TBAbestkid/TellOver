@@ -44,14 +44,15 @@ Route::middleware('auth')->group(function () {
 // Rotas para novas funcionalidades
 Route::middleware('auth')->group(function () {
     // Rota para gerenciamento de narradores (somente admin)
-    Route::get('/admin/manage-narrators', [AdminController::class, 'manageNarrators'])->name('admin.manage_narrators');
-    
-    // Rota para gerenciamento de monstros/NPCs
-    Route::get('/manage-monsters', [MonsterController::class, 'index'])->name('manage.monsters');
-    
+    Route::get('/admin/gerenciar-role', [AdminController::class, 'manageRole'])->name('admin.gerenciar_role');
+
+    // Rota para bestiário (gerenciamento de monstros/NPCs)
+    Route::get('/bestiario', [MonsterController::class, 'index'])->name('gerenciar.bestiario');
+
+
     // Rota para histórico de missões
-    Route::get('/mission-history', [MissionController::class, 'history'])->name('mission.history');
-    
+    Route::get('/historico-missoes', [MissionController::class, 'history'])->name('historico.missoes');
+
     // Rota para calculadora de dano
-    Route::get('/damage-calculator', [DamageCalculatorController::class, 'index'])->name('damage.calculator');
+    Route::get('/calculadora-dano', [DamageCalculatorController::class, 'index'])->name('calculadora.dano');
 });

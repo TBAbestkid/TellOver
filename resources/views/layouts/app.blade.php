@@ -76,7 +76,7 @@
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menu</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
             </div>
             <div class="offcanvas-body">
                 <ul class="nav flex-column">
@@ -85,53 +85,52 @@
                             <span class="nav-link">{{ Auth::user()->name }}</span>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('profile.show') }}">{{ __('Profile') }}</a>
+                            <a class="nav-link" href="{{ route('profile.show') }}">Perfil</a>
                         </li>
                         @if (Auth::user()->type == 2) <!-- Admin -->
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('admin.manage_narrators') }}">{{ __('Manage Narrators') }}</a>
+                                <a class="nav-link" href="{{ route('admin.gerenciar_narradores') }}">Gerenciar Narradores</a>
                             </li>
                         @endif
                     @endauth
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/') }}">{{ __('Home') }}</a>
+                        <a class="nav-link" href="{{ url('/') }}">Início</a>
                     </li>
                     @guest
                         @if (Route::has('login'))
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                <a class="nav-link" href="{{ route('login') }}">Entrar</a>
                             </li>
                         @endif
 
                         @if (Route::has('register'))
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                <a class="nav-link" href="{{ route('register') }}">Registrar</a>
                             </li>
                         @endif
                     @else
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('account.settings') }}">{{ __('Settings') }}</a>
+                            <a class="nav-link" href="{{ route('account.settings') }}">Configurações</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+                            <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sair</a>
                         </li>
                     @endguest
                     @auth
                         <!-- Adicionar os links para novas páginas -->
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('manage.monsters') }}">{{ __('Manage Monsters/NPCs') }}</a>
+                            <a class="nav-link" href="{{ route('gerenciar.bestiario') }}">Bestiário</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('mission.history') }}">{{ __('Mission History') }}</a>
+                            <a class="nav-link" href="{{ route('historico.missoes') }}">Histórico de Missões</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('damage.calculator') }}">{{ __('Damage Calculator') }}</a>
+                            <a class="nav-link" href="{{ route('calculadora.dano') }}">Calculadora de Dano</a>
                         </li>
                     @endauth
                 </ul>
             </div>
         </div>
-
 
 
 
