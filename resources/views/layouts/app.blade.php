@@ -87,6 +87,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('profile.show') }}">{{ __('Profile') }}</a>
                         </li>
+                        @if (Auth::user()->type == 2) <!-- Admin -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.manage_narrators') }}">{{ __('Manage Narrators') }}</a>
+                            </li>
+                        @endif
                     @endauth
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/') }}">{{ __('Home') }}</a>
@@ -111,9 +116,22 @@
                             <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
                         </li>
                     @endguest
+                    @auth
+                        <!-- Adicionar os links para novas páginas -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('manage.monsters') }}">{{ __('Manage Monsters/NPCs') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('mission.history') }}">{{ __('Mission History') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('damage.calculator') }}">{{ __('Damage Calculator') }}</a>
+                        </li>
+                    @endauth
                 </ul>
             </div>
         </div>
+
 
 
 

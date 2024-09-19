@@ -40,3 +40,18 @@ Route::middleware('auth')->group(function () {
     // Rota para a página de perfil
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
 });
+
+// Rotas para novas funcionalidades
+Route::middleware('auth')->group(function () {
+    // Rota para gerenciamento de narradores (somente admin)
+    Route::get('/admin/manage-narrators', [AdminController::class, 'manageNarrators'])->name('admin.manage_narrators');
+    
+    // Rota para gerenciamento de monstros/NPCs
+    Route::get('/manage-monsters', [MonsterController::class, 'index'])->name('manage.monsters');
+    
+    // Rota para histórico de missões
+    Route::get('/mission-history', [MissionController::class, 'history'])->name('mission.history');
+    
+    // Rota para calculadora de dano
+    Route::get('/damage-calculator', [DamageCalculatorController::class, 'index'])->name('damage.calculator');
+});

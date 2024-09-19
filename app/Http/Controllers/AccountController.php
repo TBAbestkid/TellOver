@@ -32,7 +32,7 @@ class AccountController extends Controller
     // Atualiza a senha se fornecida
     if ($request->filled('current_password') && $request->filled('new_password')) {
         if (!Hash::check($request->input('current_password'), $user->password)) {
-            return back()->withErrors(['current_password' => 'The current password is incorrect.']);
+            return back()->withErrors(['current_password' => 'Senha inserida, incorreta.']);
         }
         $user->password = Hash::make($request->input('new_password'));
     }
@@ -43,7 +43,7 @@ class AccountController extends Controller
 
     $user->save();
 
-    return redirect()->route('account.settings')->with('status', 'Account updated successfully.');
+    return redirect()->route('account.settings')->with('status', 'Atualizado com sucesso.');
 }
 
 }
