@@ -96,6 +96,18 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/') }}">Início</a>
                     </li>
+                    @auth
+                        <!-- Adicionar os links para novas páginas -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('gerenciar.bestiario') }}">Bestiário</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('historico.missoes') }}">Histórico de Missões</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('calculadora.dano') }}">Calculadora de Dano</a>
+                        </li>
+                    @endauth
                     @guest
                         @if (Route::has('login'))
                             <li class="nav-item">
@@ -113,21 +125,9 @@
                             <a class="nav-link" href="{{ route('account.settings') }}">Configurações</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sair</a>
+                            <a class="btn btn-outline-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sair</a>
                         </li>
                     @endguest
-                    @auth
-                        <!-- Adicionar os links para novas páginas -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('gerenciar.bestiario') }}">Bestiário</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('historico.missoes') }}">Histórico de Missões</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('calculadora.dano') }}">Calculadora de Dano</a>
-                        </li>
-                    @endauth
                 </ul>
             </div>
         </div>
