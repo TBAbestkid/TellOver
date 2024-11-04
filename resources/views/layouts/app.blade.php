@@ -12,6 +12,12 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
@@ -28,16 +34,18 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
+            
+                @auth
+                    <!-- Botão para abrir o menu offcanvas -->
+                    <button class="btn btn-primary d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu" aria-expanded="false" aria-label="{{ __('Toggle menu') }}">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
 
-                <!-- Botão para abrir o menu offcanvas -->
-                <button class="btn btn-primary d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu" aria-expanded="false" aria-label="{{ __('Toggle menu') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <!-- Botão para abrir o menu offcanvas em telas maiores -->
-                <button class="navbar-toggler d-none d-md-block" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu" aria-expanded="false" aria-label="{{ __('Toggle menu') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                    <!-- Botão para abrir o menu offcanvas em telas maiores -->
+                    <button class="navbar-toggler d-none d-md-block" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu" aria-expanded="false" aria-label="{{ __('Toggle menu') }}">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                @endauth
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Lado Esquerdo da Barra de Navegação -->
@@ -58,14 +66,16 @@
                                 </li>
                             @endif
                         @else
-                            <!-- Adicione um formulário de pesquisa -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('personagem') }}">Personagens</a>
+                            </li>
+    
                             <li class="nav-item">
                                 <form class="d-flex" action="{{ route('search') }}" method="GET">
                                     <input class="form-control me-2" type="search" name="query" placeholder="Pesquisar" aria-label="Search">
                                     <button class="btn btn-outline-success" type="submit">Pesquisar</button>
                                 </form>
-                            </li>
-                            <!-- Remova o dropdown daqui -->
+                            </li>                        
                         @endguest
                     </ul>
                 </div>
@@ -102,7 +112,10 @@
                             <a class="nav-link" href="{{ route('gerenciar.bestiario') }}">Bestiário</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('historico.missoes') }}">Histórico de Missões</a>
+                            <a class="nav-link" href="{{ route('misson.historico_missoes') }}">Histórico de Missões</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('misson.mission') }}">Missões</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('calculadora.dano') }}">Calculadora de Dano</a>
