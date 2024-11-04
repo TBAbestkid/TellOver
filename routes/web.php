@@ -5,6 +5,10 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\MonsterController;
+use App\Http\Controllers\MissionController;
+use App\Http\Controllers\PersonagemController;
+use App\Http\Controllers\DamageCalculatorController;
 
 
 Route::get('/', function () {
@@ -36,10 +40,15 @@ Route::get('/search', [SearchController::class, 'search'])->name('search');
 
 Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
 
+Route::get('/personagem', [PersonagemController::class, 'index'])->name('personagem');
+Route::get('/criar-personagem', [PersonagemController::class, 'criarPersonagem'])->name('criarpersonagem');
+
 Route::middleware('auth')->group(function () {
     // Rota para a página de perfil
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
 });
+
+Route::get('/calculadora-dano', [DamageCalculatorController::class, 'index'])->name('calculadora.dano');
 
 // Rotas para novas funcionalidades
 Route::middleware('auth')->group(function () {
@@ -51,8 +60,8 @@ Route::middleware('auth')->group(function () {
 
 
     // Rota para histórico de missões
-    Route::get('/historico-missoes', [MissionController::class, 'history'])->name('historico.missoes');
+    Route::get('/historico-missoes', [MissionController::class, 'index'])->name('misson.historico_missoes');
 
     // Rota para calculadora de dano
-    Route::get('/calculadora-dano', [DamageCalculatorController::class, 'index'])->name('calculadora.dano');
+    Route::get('/missao', [MissionController::class, 'criarMission'])->name('misson.mission');
 });
