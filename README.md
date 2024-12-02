@@ -26,39 +26,56 @@
 ## Como Executar o Projeto
 
 1. Clone este repositório:  
-   ```
+   ```bash
    git clone https://github.com/seu-usuario/tellover.git
    ```
 
 2. Acesse o diretório do projeto:  
-   ```
+   ```bash
    cd tellover
    ```
 
 3. Instale as dependências:  
-   ```
+   ```bash
    composer install
    npm install
    ```
 
-4. Configure o arquivo `.env` com os detalhes do seu banco de dados.
+4. Configure o arquivo `.env`:  
+   - Faça uma cópia do arquivo `.env.example` e renomeie para `.env`:  
+     ```bash
+     cp .env.example .env
+     ```
+   - Edite o `.env` e configure as informações do banco de dados:  
+     ```dotenv
+     DB_CONNECTION=mysql
+     DB_HOST=127.0.0.1
+     DB_PORT=3306
+     DB_DATABASE=nome_do_banco
+     DB_USERNAME=seu_usuario
+     DB_PASSWORD=sua_senha
+     ```
 
-5. Execute as migrações:  
+5. Gere a chave da aplicação:  
+   ```bash
+   php artisan key:generate
    ```
+
+6. Execute as migrações para criar as tabelas:  
+   ```bash
    php artisan migrate
    ```
 
-6. Inicie o servidor local:  
-   ```
+7. Inicie o servidor local:  
+   ```bash
    php artisan serve
    npm run dev
    ```
 
-7. Acesse em: [http://localhost:8000](http://localhost:8000)
+8. Acesse a aplicação em: [http://localhost:8000](http://localhost:8000)
 
 ## Estrutura do Projeto
 
 - `app/Models`: Modelos principais, como `User` e `Monstro`.  
 - `resources/views`: Views para o frontend, incluindo modais e partials.  
-- `database/migrations`: Estruturação das tabelas do banco de dados.  
-
+- `database/migrations`: Estruturação das tabelas do banco de dados.
