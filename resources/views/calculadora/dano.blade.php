@@ -225,77 +225,76 @@
 
 <script>
     // Evento para mudança de tipo de dano
-document.getElementById('damageType').addEventListener('change', function() {
-    const elementalTypeContainer = document.getElementById('elementalTypeContainer');
-    const forceContainer = document.getElementById('forceContainer');
+    document.getElementById('damageType').addEventListener('change', function() {
+        const elementalTypeContainer = document.getElementById('elementalTypeContainer');
+        const forceContainer = document.getElementById('forceContainer');
 
-    if (this.value === 'elemental') {
-        elementalTypeContainer.classList.remove('d-none');
-        forceContainer.classList.add('d-none');
-    } else {
-        elementalTypeContainer.classList.add('d-none');
-        forceContainer.classList.toggle('d-none', this.value !== 'fisico');
-    }
-});
-
-// Evento para mudança de tipo de armadura
-document.getElementById('armorType').addEventListener('change', function() {
-    const elementalArmorContainer = document.getElementById('elementalArmorContainer');
-    const specificElementalArmorContainer = document.getElementById('specificElementalArmorContainer');
-
-    if (this.value === 'elemental') {
-        elementalArmorContainer.classList.remove('d-none');
-    } else {
-        elementalArmorContainer.classList.add('d-none');
-        specificElementalArmorContainer.classList.add('d-none');
-    }
-});
-
-// Evento para mudança do tipo de armadura elemental
-document.getElementById('elementalArmorType').addEventListener('change', function() {
-    const specificElementalArmorContainer = document.getElementById('specificElementalArmorContainer');
-    
-    if (this.value === 'especifica') {
-        specificElementalArmorContainer.classList.remove('d-none');
-    } else {
-        specificElementalArmorContainer.classList.add('d-none');
-    }
-});
-
-// Evento para calcular o dano
-document.getElementById('damage-calculator-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const damageType = document.getElementById('damageType').value;
-    const damageAmount = parseInt(document.getElementById('damageAmount').value);
-    const armorAmount = parseInt(document.getElementById('armorAmount').value) || 0;
-    let result = 0;
-
-    if (damageType === 'fisico') {
-        const forceAmount = parseInt(document.getElementById('forceAmount').value) || 0;
-        if (forceAmount > 3) {
-            result = damageAmount; // Força suficiente para ignorar armadura
+        if (this.value === 'elemental') {
+            elementalTypeContainer.classList.remove('d-none');
+            forceContainer.classList.add('d-none');
         } else {
-            result = Math.max(damageAmount - armorAmount, 0);
+            elementalTypeContainer.classList.add('d-none');
+            forceContainer.classList.toggle('d-none', this.value !== 'fisico');
         }
-    } else if (damageType === 'magico') {
-        result = Math.max(damageAmount - armorAmount, 0);
-    } else if (damageType === 'elemental') {
-        const elementalDamageType = document.getElementById('elementalDamageType').value;
-        const elementalArmorType = document.getElementById('elementalArmorType').value;
-        const specificArmorType = document.getElementById('specificElementalType').value;
+    });
 
-        if (elementalArmorType === 'especifica' && elementalDamageType === specificArmorType) {
-            result = Math.max(damageAmount - armorAmount, 0);
-        } else if (elementalArmorType === 'geral') {
-            result = Math.max(damageAmount - armorAmount, 0);
+    // Evento para mudança de tipo de armadura
+    document.getElementById('armorType').addEventListener('change', function() {
+        const elementalArmorContainer = document.getElementById('elementalArmorContainer');
+        const specificElementalArmorContainer = document.getElementById('specificElementalArmorContainer');
+
+        if (this.value === 'elemental') {
+            elementalArmorContainer.classList.remove('d-none');
         } else {
-            result = damageAmount; // Dano total se não houver resistência
+            elementalArmorContainer.classList.add('d-none');
+            specificElementalArmorContainer.classList.add('d-none');
         }
-    }
+    });
 
-    document.getElementById('result').innerHTML = `<h2>Dano Resultante: ${result}</h2>`;
-});
+    // Evento para mudança do tipo de armadura elemental
+    document.getElementById('elementalArmorType').addEventListener('change', function() {
+        const specificElementalArmorContainer = document.getElementById('specificElementalArmorContainer');
+        
+        if (this.value === 'especifica') {
+            specificElementalArmorContainer.classList.remove('d-none');
+        } else {
+            specificElementalArmorContainer.classList.add('d-none');
+        }
+    });
 
+    // Evento para calcular o dano
+    document.getElementById('damage-calculator-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const damageType = document.getElementById('damageType').value;
+        const damageAmount = parseInt(document.getElementById('damageAmount').value);
+        const armorAmount = parseInt(document.getElementById('armorAmount').value) || 0;
+        let result = 0;
+
+        if (damageType === 'fisico') {
+            const forceAmount = parseInt(document.getElementById('forceAmount').value) || 0;
+            if (forceAmount > 3) {
+                result = damageAmount; // Força suficiente para ignorar armadura
+            } else {
+                result = Math.max(damageAmount - armorAmount, 0);
+            }
+        } else if (damageType === 'magico') {
+            result = Math.max(damageAmount - armorAmount, 0);
+        } else if (damageType === 'elemental') {
+            const elementalDamageType = document.getElementById('elementalDamageType').value;
+            const elementalArmorType = document.getElementById('elementalArmorType').value;
+            const specificArmorType = document.getElementById('specificElementalType').value;
+
+            if (elementalArmorType === 'especifica' && elementalDamageType === specificArmorType) {
+                result = Math.max(damageAmount - armorAmount, 0);
+            } else if (elementalArmorType === 'geral') {
+                result = Math.max(damageAmount - armorAmount, 0);
+            } else {
+                result = damageAmount; // Dano total se não houver resistência
+            }
+        }
+
+        document.getElementById('result').innerHTML = `<h2>Dano Resultante: ${result}</h2>`;
+    });
 </script>
 @endsection
