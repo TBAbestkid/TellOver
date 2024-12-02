@@ -40,8 +40,11 @@ Route::get('/search', [SearchController::class, 'search'])->name('search');
 
 Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
 
-Route::get('/personagem', [PersonagemController::class, 'index'])->name('personagem');
-Route::get('/criar-personagem', [PersonagemController::class, 'criarPersonagem'])->name('criarpersonagem');
+Route::middleware('auth')->group(function() {
+    Route::get('/personagem', [PersonagemController::class, 'index'])->name('personagem');
+    Route::get('/personagens/criar', [PersonagemController::class, 'create'])->name('criarpersonagem');
+    Route::post('/criar-personagem', [PersonagemController::class, 'criarPersonagem'])->name('criarpersonagem.post');
+});
 
 Route::middleware('auth')->group(function () {
     // Rota para a página de perfil
