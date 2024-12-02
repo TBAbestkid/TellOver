@@ -2,23 +2,37 @@
 
 @section('content')
 <div class="container">
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
     <div class="row">
         <div class="col-md-4">
             <h4>Lista de Personagens</h4>
-            <ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Personagem 1
-                    <span class="badge text-bg-secondary badge-pill">Nível 10</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Personagem 2
-                    <span class="badge text-bg-secondary badge-pill">Nível 20</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Personagem 3
-                    <span class="badge text-bg-secondary badge-pill">Nível 15</span>
-                </li>
-            </ul>
+            @if($personagens->isEmpty()) <!-- Verifica se não há personagens -->
+                <div class="alert alert-warning" role="alert">
+                    Você ainda não tem personagens! <a href="{{ route('criarpersonagem') }}" class="alert-link">Crie um agora!</a>
+                </div>
+            @else
+                <ul class="list-group">
+                    @foreach($personagens as $personagem)
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ $personagem->nome }}
+                            <span class="badge text-bg-secondary badge-pill">Nível {{ $personagem->nivel }}</span>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
         </div>
 
         <div class="col-md-8">
@@ -28,22 +42,31 @@
                     <a href="{{ route('criarpersonagem') }}" class="btn btn-primary text-end">Criar personagem?</a>
                 </div>
                 <div class="card-body">
-                    <h2 class="accordion-header" id="headingHP">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHP" aria-expanded="true" aria-controls="collapseHP">
-                            Personagem
-                        </button>
-                    </h2>
-                    <div id="collapseHP" class="accordion-collapse collapse show" aria-labelledby="headingHP" data-bs-parent="#rulesAccordion">
-                        <div class="accordion-body">
-                            <hr>
-                            <p><strong>Nome:</strong> Personagem 1</p>
-                            <p><strong>Nível:</strong> 10</p>
-                            <p><strong>Classe:</strong> Guerreiro</p>
-                            <p><strong>Habilidades:</strong> Força, Agilidade</p>
+                    @if($personagens->isNotEmpty()) <!-- Exibe os detalhes do primeiro personagem, se houver -->
+                        <h2 class="accordion-header" id="headingHP">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHP" aria-expanded="true" aria-controls="collapseHP">
+                                {{ $personagens[0]->nome }}
+                            </button>
+                        </h2>
+                        <div id="collapseHP" class="accordion-collapse collapse show" aria-labelledby="headingHP" data-bs-parent="#rulesAccordion">
+                            <div class="accordion-body">
+                                <hr>
+                                <p><strong>Nome:</strong> {{ $personagens[0]->nome }}</p>
+                                <p><strong>Nível:</strong> {{ $personagens[0]->nivel }}</p>
+                                <p><strong>Habilidades:</strong> 
+                                    @php
+                                        $habilidades = json_decode($personagens[0]->habilidades, true); 
+                                        $habilidades = is_array($habilidades) ? $habilidades : [];
+                                    @endphp
+                                    {{ implode(', ', $habilidades) ?: 'Nenhuma' }}
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                    @else
+                        <p>Selecione um personagem para ver os detalhes.</p>
+                    @endif
                 </div>
-                <div class="card-footer ">
+                <div class="card-footer">
                 </div>
             </div>
         </div>
