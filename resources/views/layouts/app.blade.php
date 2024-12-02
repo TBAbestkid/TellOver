@@ -19,6 +19,9 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
+    <!-- Select2 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
@@ -70,12 +73,12 @@
                                 <a class="nav-link" href="{{ route('personagem') }}">Personagens</a>
                             </li>
     
-                            <li class="nav-item">
+                            <!-- <li class="nav-item">
                                 <form class="d-flex" action="{{ route('search') }}" method="GET">
                                     <input class="form-control me-2" type="search" name="query" placeholder="Pesquisar" aria-label="Search">
                                     <button class="btn btn-outline-success" type="submit">Pesquisar</button>
                                 </form>
-                            </li>                        
+                            </li> -->
                         @endguest
                     </ul>
                 </div>
