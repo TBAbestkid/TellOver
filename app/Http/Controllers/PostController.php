@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // Importar o facade Auth para verificar o usuário autenticado
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -18,7 +18,7 @@ class PostController extends Controller
         // Retorna a view 'home' com a variável $posts
         return view('home', compact('posts'));
     }
-    
+
     // Armazena um novo post
     public function store(Request $request)
     {
@@ -32,7 +32,7 @@ class PostController extends Controller
         Post::create([
             'title' => $request->title,
             'body' => $request->body,
-            'user_id' => auth()->id(), // Associa o post ao usuário autenticado
+            'user_id' => Auth::id(), // Associa o post ao usuário autenticado
         ]);
 
         // Redireciona para a página inicial com uma mensagem de sucesso
@@ -46,7 +46,7 @@ class PostController extends Controller
         if (Auth::id() !== $post->user_id) {
             abort(403); // Se não for o proprietário, retorna um erro 403 (Proibido)
         }
-        
+
         // Retorna a view de edição com o post
         return view('posts.edit', compact('post'));
     }
