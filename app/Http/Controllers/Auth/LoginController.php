@@ -3,38 +3,70 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\log;
+use App\Models\User;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
-    use AuthenticatesUsers;
-
     /**
-     * Where to redirect users after login.
+     * Exibe o formulário de login.
      *
-     * @var string
+     * @return \Illuminate\View\View
      */
-    protected $redirectTo = '/home';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function showLoginForm()
     {
-        $this->middleware('guest')->except('logout');
-        $this->middleware('auth')->only('logout');
+        return view('auth.login'); // A view padrão de login
+    }
+
+    /**
+     * Lógica de login personalizada.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function login(Request $request)
+    {
+        // Valida o campo obrigatório de e-mail
+        $validated = $request->validate([
+            'email' => 'required|email',
+        ], [
+            'email.required' => 'O campo de e-mail é obrigatório.',
+            'email.email' => 'Informe um e-mail válido.',
+        ]);
+
+        // Credenciais
+        $credentials = $request->only('email');
+
+        // Encontra o usuário pelo e-mail
+        $user = User::where('email', $credentials['email'])->first();
+
+        // Verifica se o usuário existe
+        if (!$user) {
+            return back()->withErrors(['email' => 'E-mail não encontrado.'])->onlyInput('email');
+        }
+
+        // Loga o usuário manualmente (sem verificar senha)
+        Auth::login($user);
+
+        // Regenera a sessão para evitar ataques de fixação de sessão
+        $request->session()->regenerate();
+
+        // Redireciona para a página principal
+        return redirect()->intended('/home');
+    }
+
+    /**
+     * Método para fazer o logout.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('login')->with('success', 'Você saiu com sucesso!');
     }
 }
