@@ -20,9 +20,24 @@ class Personagem extends Model
         'percepcao', 'regeneracao', 'vampirismo', 'multi_ataque',
         'teleporte_curto', 'teleporte_global', 'nivel'
     ];
-    
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
+    public function level()
+    {
+        return $this->hasOne(Level::class, 'personagem_id');
+    }
+    public function itens()
+    {
+        return $this->belongsToMany(Item::class, 'inventarios', 'personagem_id', 'item_id');
+    }
+
+    public function equipamentos()
+    {
+        return $this->belongsToMany(Item::class, 'equipamentos', 'personagem_id', 'item_id');
+    }
+
 }
