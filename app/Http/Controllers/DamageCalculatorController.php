@@ -8,6 +8,10 @@ class DamageCalculatorController extends Controller
 {
     public function index()
     {
-        return view('calculadora.dano'); 
+        return view('calculadora.dano');
+    }
+    public function regras()
+    {
+        return view('calculadora.regras');
     }
 }
