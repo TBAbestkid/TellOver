@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class AccountController extends Controller
 {
     public function settings()
     {
-        // Aqui passa os dados para a view 
+        // Aqui passa os dados para a view
         return view('account.settings');
     }
     public function update(Request $request)
