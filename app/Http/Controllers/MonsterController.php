@@ -90,13 +90,13 @@ class MonsterController extends Controller
         // Verifica se a imagem foi enviada e a armazena
         if ($request->hasFile('imagem')) {
             // Se já houver uma imagem antiga, exclua
-            if ($monster->imagem) {
-                Storage::delete($monster->imagem); // Deleta a imagem antiga
+            if ($monster->imagem && Storage::exists($monster->imagem)) {
+                Storage::delete($monster->imagem); // Remove a imagem antiga
             }
 
-            // Armazena a nova imagem
-            $imagePath = $request->file('imagem')->store('public/imagens');
-            $monster->imagem = $imagePath;
+            // Salva a nova imagem
+            $imagePath = $request->file('imagem')->store('imagens', 'public'); // Usando o disco público
+            $monster->imagem = $imagePath; // Caminho correto para o banco de dados, sem 'storage/' prefixado
         }
 
         // Salvar e redirecionar
@@ -104,7 +104,6 @@ class MonsterController extends Controller
 
         return redirect()->route('bestiario.index')->with('success', 'Monstro/NPC atualizado com sucesso!');
     }
-
 
     public function destroy(Monster $monster)
     {
