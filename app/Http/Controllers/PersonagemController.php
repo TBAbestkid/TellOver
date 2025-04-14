@@ -298,6 +298,10 @@ class PersonagemController extends Controller
         session(['personagem_selecionado' => $personagem->id]);
 
         // Redireciona para a página inicial ou qualquer outra página
-        return redirect()->back()->with('success', 'Personagem selecionado com sucesso!');
+        if ($personagem) {
+            return response()->json(['message' => 'Personagem selecionado com sucesso!']);
+        } else {
+            return response()->json(['message' => 'Personagem não encontrado!'], 404);
+        }
     }
 }
