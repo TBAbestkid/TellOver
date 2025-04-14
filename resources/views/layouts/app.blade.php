@@ -12,7 +12,7 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
 
@@ -21,7 +21,7 @@
 
     <!-- Select2 -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-    
+
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
@@ -37,7 +37,7 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
-            
+
                 @auth
                     <!-- Botão para abrir o menu offcanvas -->
                     <button class="btn btn-primary d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu" aria-expanded="false" aria-label="{{ __('Toggle menu') }}">
@@ -72,13 +72,13 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('personagem') }}">Personagens</a>
                             </li>
-    
-                            <!-- <li class="nav-item">
-                                <form class="d-flex" action="{{ route('search') }}" method="GET">
-                                    <input class="form-control me-2" type="search" name="query" placeholder="Pesquisar" aria-label="Search">
-                                    <button class="btn btn-outline-success" type="submit">Pesquisar</button>
-                                </form>
-                            </li> -->
+                            <li class="nav-item d-flex align-items-center ms-3 ">
+                                <!-- Exibir moedas com badge -->
+                                <img src="https://cdn.discordapp.com/emojis/1043372349484974131.png?size=2048" alt="Moeda" style="width: 24px; height: 24px;" class="me-1">
+                                <span class="">
+                                    {{ number_format(Auth::user()->tabs ?? 0, 0, ',', '.') }}
+                                </span>
+                            </li>
                         @endguest
                     </ul>
                 </div>
@@ -112,16 +112,22 @@
                     @auth
                         <!-- Adicionar os links para novas páginas -->
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('gerenciar.bestiario') }}">Bestiário</a>
+                            <a class="nav-link" href="{{ route('bestiario.index') }}">Bestiário</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('misson.historico_missoes') }}">Histórico de Missões</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('misson.mission') }}">Missões</a>
+                            <a class="nav-link" href="{{ route('misson.index') }}">Gerenciador de Missões</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('calculadora.dano') }}">Calculadora de Dano</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('calculadora.regras') }}">Regras RPG</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('personagem.selecao') }}">Entrar em Gukin</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('world.titlescreen') }}">Tela Inicial</a>
                         </li>
                     @endauth
                     @guest
@@ -148,7 +154,27 @@
             </div>
         </div>
 
-
+        <!-- Modal de Confirmação de Logout -->
+        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="logoutModalLabel">Confirmar Logout</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Tem certeza de que deseja sair?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-danger">Sair</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <main class="py-4">
             @yield('content')

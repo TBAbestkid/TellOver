@@ -1,0 +1,101 @@
+.sidebar {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.9), rgba(50, 50, 50, 0.9));
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar button {
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    border: none;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar button:hover {
+    background: linear-gradient(45deg, #0056b3, #003f88);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+}
+
+.card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.toast {
+    position: fixed; /* Garante que o toast fique no topo da tela */
+    top: 20px;
+    right: 20px;
+    z-index: 1050; /* Garante que o toast fique acima de outros elementos */
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s ease-in-out, visibility 0s linear 0.5s;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    min-width: 200px;
+    background-color: #28a745; /* Verde para sucesso */
+    color: white;
+}
+
+.toast.fade-out {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out, visibility 0s linear 0s;
+}
+
+#spinner {
+    position: fixed; /* Fixa o spinner na tela */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro e transparente */
+    z-index: 1050; /* Certifique-se de que o spinner esteja acima de outros elementos */
+}
+
+.spinner-border {
+    width: 3rem; /* Ajuste o tamanho do spinner */
+    height: 3rem;
+}
+
+/* Estilo para a transição */
+.fade {
+    transition: opacity 0.5s ease-in-out;
+    opacity: 0;
+}
+
+.fade.in {
+    opacity: 1;
+}
+
+/* Estilo inicial da página */
+.page {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 100%;
+    transition: transform 0.5s ease-in-out;
+}
+
+.page.in {
+    transform: translateX(-100%);
+}
+
+.page.out {
+    transform: translateX(0);
+}
