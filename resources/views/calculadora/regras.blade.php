@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mt-5">
-    <h1>Sobre o RPG</h1>
+    <h1 class="text-center">Sobre o RPG</h1>
 </div>
 <div class="border rounded p-4 mt-4 mx-auto" style="max-width: 600px;">
     <h5 class="text-center">Sobre o Dano</h5>
