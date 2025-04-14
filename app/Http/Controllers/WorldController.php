@@ -6,7 +6,10 @@ use App\Models\Guild;
 use App\Models\Region;
 use App\Models\Item;
 use App\Models\Inventario;
+use App\Models\Personagem;
+
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class WorldController extends Controller
@@ -65,62 +68,72 @@ class WorldController extends Controller
     {
         // Busca a região pelo ID no banco de dados
         $region = Region::findOrFail($id);
-
+        $user = Auth::user();
         // Aqui você pode adicionar lógica adicional sobre o hospital, se necessário
-        return view('world.hospital', compact('region'));
+        return view('world.hospital', compact('region','user'));
     }
 
-    // public function buyPotion($id, $item_id)
-    // {
-    //     // Recupera a região
-    //     $region = Region::findOrFail($id);
+    public function titleScreen()
+    {
+        $personagens = Auth::user()->personagens;
+        return view('world.titlescreen', compact('personagens'));
+    }
 
-    //     // Preços das poções diretamente na função
+    // public function buyPotion(Request $request, $region_id, $item_id)
+    // {
+    //     // Obtém a região
+    //     $region = Region::findOrFail($region_id);
+
+    //     // Tabela de preços (adicione mais itens conforme necessário)
     //     $precos = [
-    //         1 => 870,  // Poção Leve
-    //         2 => 1200, // Poção Média
-    //         3 => 2400  // Poção Forte
+    //         1 => 870,  // Exemplo: Poção comum
+    //         2 => 1200, // Exemplo: Poção avançada
+    //         3 => 2400  // Exemplo: Poção rara
     //     ];
 
-    //     // Verifica se o item_id é válido
-    //     if (!array_key_exists($item_id, $precos)) {
+    //     // Valida o item
+    //     if (!isset($precos[$item_id])) {
     //         return back()->with('erro', 'Poção não encontrada.');
     //     }
 
-    //     // Recupera o preço da poção
     //     $preco = $precos[$item_id];
 
-    //     // Verifica se o usuário está autenticado
-    //     $usuario = Auth::user();
+    //     $usuario = Auth::user(); // Obtém o usuário autenticado
 
-    //     // Verifica se o personagem foi selecionado
-    //     $personagem = $usuario->personagens->find(request('personagem_id')); // Assumindo que o personagem é selecionado no formulário
+    //     if (!$usuario) {
+    //         return back()->with('erro', 'Usuário não encontrado.');
+    //     }
+
+    //     // Valida o personagem
+    //     $personagem = $usuario->personagens->find($request->input('personagem_id'));
+
     //     if (!$personagem) {
     //         return back()->with('erro', 'Personagem não encontrado.');
     //     }
 
-    //     // Verifica se o usuário tem tabs suficientes para comprar a poção
+    //     // Verifica saldo de tabs
     //     if ($usuario->tabs < $preco) {
-    //         return back()->with('erro', 'Você não tem tabs suficientes para comprar esta poção.');
+    //         return back()->with('erro', 'Você não tem tabs suficientes.');
     //     }
 
-    //     // Reduz os tabs do usuário
-    //     $usuario->tabs -= $preco;
-    //     $usuario->save();
-
-    //     // Verifica se o item existe na tabela 'itens'
+    //     // Obtém o item
     //     $item = Item::find($item_id);
     //     if (!$item) {
     //         return back()->with('erro', 'Item não encontrado.');
     //     }
 
-    //     // Adiciona o item ao inventário do personagem
-    //     $inventario = new Inventario();
-    //     $inventario->personagem_id = $personagem->id; // Usando o personagem selecionado
-    //     $inventario->item_id = $item_id; // Armazena o ID do item
-    //     $inventario->save();
+    //     // Deduz tabs do usuário
+    //     $usuario->tabs -= $preco;
+    //     $usuario->save(); // Salva as alterações no banco de dados
 
-    //     return back()->with('sucesso', 'Poção comprada com sucesso!');
+    //     // Adiciona o item ao inventário do personagem
+    //     Inventario::create([
+    //         'personagem_id' => $personagem->id,
+    //         'item_id' => $item_id,
+    //     ]);
+
+    //     // Retorna sucesso
+    //     return back()->with('sucesso', 'Poção comprada e adicionada ao inventário com sucesso!');
     // }
 
     // Método para exibir detalhes da loja da região
@@ -129,5 +142,26 @@ class WorldController extends Controller
         $region = Region::findOrFail($id);
 
         return view('world.store', compact('region'));
+    }
+
+    public function sistemasolar(){
+
+        $personagens = Auth::user()->personagens;
+
+        return view('world.systemsun', compact('personagens'));
+    }
+    public function introducao(){
+
+        // Recupera o ID do personagem selecionado da sessão
+        $id = session('personagem_selecionado');
+
+        // Verifica se existe um ID válido na sessão
+        if (!$id) {
+            return redirect()->back()->with('error', 'Nenhum personagem selecionado.');
+        }
+
+        $personagem = Personagem::findOrFail($id);
+
+        return view('world.introducao', compact('personagem'));
     }
 }

@@ -40,4 +40,9 @@ class Personagem extends Model
         return $this->belongsToMany(Item::class, 'equipamentos', 'personagem_id', 'item_id');
     }
 
+    public function inventario()
+    {
+        return $this->hasMany(Inventario::class);
+    }
+
 }
