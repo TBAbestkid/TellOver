@@ -7,6 +7,8 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <link rel="icon" href="images/logos-site-T.png" type="image/x-icon">
+
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
@@ -111,7 +113,7 @@
                     </li>
                     @auth
                         <!-- Adicionar os links para novas páginas -->
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link" href="{{ route('bestiario.index') }}">Bestiário</a>
                         </li>
                         <li class="nav-item">
@@ -128,7 +130,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('world.titlescreen') }}">Tela Inicial</a>
-                        </li>
+                        </li> --}}
                     @endauth
                     @guest
                         @if (Route::has('login'))

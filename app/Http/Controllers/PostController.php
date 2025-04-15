@@ -22,22 +22,35 @@ class PostController extends Controller
     // Armazena um novo post
     public function store(Request $request)
     {
-        // Valida os dados do formulário
-        $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string',
         ]);
 
-        // Cria um novo post associado ao usuário autenticado
-        Post::create([
-            'title' => $request->title,
-            'body' => $request->body,
-            'user_id' => Auth::id(), // Associa o post ao usuário autenticado
+        if (!Auth::check()) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $post = Post::create([
+            'title' => $validated['title'],
+            'body' => $validated['body'],
+            'user_id' => Auth::id(),
         ]);
 
-        // Redireciona para a página inicial com uma mensagem de sucesso
+        // Se for AJAX, responde com JSON
+        if ($request->ajax()) {
+            return response()->json([
+                'message' => 'Post criado com sucesso',
+                'post' => $post,
+                'user' => Auth::user()->name,
+                'created_at' => now()->format('d/m/Y H:i'),
+            ]);
+        }
+
+        // Se não for AJAX, redireciona
         return redirect()->route('home')->with('status', 'Post criado com sucesso!');
     }
+
 
     // Exibe o formulário de edição para um post específico
     public function edit(Post $post)
