@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\Post; // Correção na importação
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
@@ -18,9 +19,11 @@ class ProfileController extends Controller
 
     public function show()
     {
-        // Passa o usuário autenticado e seus posts para a view
-        $user = Auth::user();
-        $posts = Post::where('user_id', $user->id)->get(); // Busca posts do usuário autenticado
+        $user = User::with(['followers', 'following', 'posts'])->find(Auth::id());
+
+        $posts = $user->posts()->latest()->get();
+
         return view('profile', compact('user', 'posts'));
     }
+
 }
