@@ -48,6 +48,13 @@ Route::put('/account/update', [AccountController::class, 'update'])->name('accou
 
 Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
 
+Route::get('/u/{username}', [ProfileController::class, 'showByUsername'])->name('profile.showByUsername');
+
+Route::post('/follow/{id}', [ProfileController::class, 'toggleFollow'])->name('profile.toggleFollow');
+
+Route::post('/profile/bio', [ProfileController::class, 'updateBio'])->name('profile.updateBio');
+
+
 Route::middleware('auth')->group(function() {
     // Página de listagem de personagens
     Route::get('/personagem', [PersonagemController::class, 'index'])->name('personagem');
