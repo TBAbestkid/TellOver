@@ -17,13 +17,18 @@ class ProfileController extends Controller
         return view('home', ['posts' => $posts]); // Retorna a view com a variável $posts
     }
 
-    public function show()
+    public function show($identificador)
     {
-        $user = User::with(['followers', 'following', 'posts'])->find(Auth::id());
+        $identificador = strtolower(str_replace(' ', '', $identificador));
+
+        $user = User::whereRaw('LOWER(REPLACE(username, " ", "")) = ?', [$identificador])
+            ->orWhereRaw('LOWER(REPLACE(name, " ", "")) = ?', [$identificador])
+            ->firstOrFail();
+
+        $isOwner = Auth::check() && Auth::id() === $user->id;
 
         $posts = $user->posts()->latest()->get();
 
-        return view('profile', compact('user', 'posts'));
+        return view('profile', compact('user', 'posts', 'isOwner'));
     }
-
 }
