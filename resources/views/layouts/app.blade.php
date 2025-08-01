@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="icon" href="images/logos-site-T.png" type="image/x-icon">
+    <link rel="icon" href="{{ asset('images/logos-site-T.png') }}" type="image/x-icon">
 
     <title>@yield('title', 'TellOver')</title>
 
@@ -26,6 +26,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
     @vite(['resources/css/app.css', 'resources/js/post-utils.js', 'resources/js/add-posts.js'])
+
+    @stack('custom-assets')
 
 </head>
 <body>
@@ -63,14 +65,12 @@
                             @endif
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Cadastro') }}</a>
                                 </li>
                             @endif
-                            @if (Route::currentRouteName() === 'about')
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="{{ route('about') }}">Sobre o Tellover</a>
-                                </li>
-                            @endif
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('about') }}">Sobre o Tellover</a>
+                            </li>
                         @else
                             @include('partials.notifications')
                         @endguest

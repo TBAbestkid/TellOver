@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StorePostRequest;
+use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
@@ -19,38 +21,54 @@ class PostController extends Controller
         return view('home', compact('posts'));
     }
 
-    // Armazena um novo post
-    public function store(Request $request)
+    public function show(Post $post, $username)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'body' => 'required|string',
-        ]);
-
-        if (!Auth::check()) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        // Verifica se o username da URL bate com o autor do post
+        if ($post->user->name !== $username) {
+            abort(404);
         }
 
-        $post = Post::create([
-            'title' => $validated['title'],
-            'body' => $validated['body'],
-            'user_id' => Auth::id(),
-        ]);
-
-        // Se for AJAX, responde com JSON
-        if ($request->ajax()) {
-            return response()->json([
-                'message' => 'Post criado com sucesso',
-                'post' => $post,
-                'user' => Auth::user()->name,
-                'created_at' => now()->format('d/m/Y H:i'),
-            ]);
+        if (strtolower($post->user->name) !== strtolower($username)) {
+            abort(404);
         }
 
-        // Se não for AJAX, redireciona
-        return redirect()->route('home')->with('status', 'Post criado com sucesso!');
+        return view('post', ['post' => $post,]);
     }
 
+    // Armazena um novo post
+    public function store(StorePostRequest $request)
+    {
+        try{
+            $user = Auth::user();
+            if (!$user) {
+                return response()->json(['error' => 'Usuário não autenticado.'], 401);
+            }
+            $post = new Post();
+            $post->user_id = $user->id;
+            $post->body = $request->body;
+            $post->visibility = $request->visibility;
+            $post->allow_comments = $request->boolean('allow_comments', true); // true default
+
+            $post->save();
+
+            $paths = [];
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $paths[] = $image->store('posts', 'public');
+                }
+                $post->image_path = json_encode($paths);
+                $post->save();
+            }
+            $post->load('user');
+
+            return response()->json([
+                'message' => 'Post criado com sucesso.',
+                'html' => view('partials.post', compact('post'))->render()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao criar post.'], 500);
+        }
+    }
 
     // Exibe o formulário de edição para um post específico
     public function edit(Post $post)

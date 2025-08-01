@@ -13,13 +13,21 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
+
             $table->foreignId('post_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+
+            $table->foreignId('parent_id')->nullable()->constrained('comments')->onDelete('cascade'); // resposta a comentário
             $table->text('body')->nullable();
             $table->string('image_path')->nullable(); // Caminho da imagem
+
+            $table->unsignedInteger('likes_count')->default(0); // Contador de likes
+
+            $table->timestamp('edited_at')->nullable(); // Data da edição
+            $table->softDeletes(); // Para exclusão lógica (deleted_at)
+
             $table->timestamps();
         });
-
     }
 
     /**

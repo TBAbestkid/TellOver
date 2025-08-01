@@ -1,4 +1,9 @@
-<div class="card mb-3 shadow-sm border-0 rounded-3">
+@php
+    $usernameSlug = Str::slug($post->user->name);
+    $url = route('post', ['post' => $post->id, 'username' => $usernameSlug]);
+@endphp
+{{-- card clicavel --}}
+<div class="card mb-3 border-0 rounded-3" style="hover:cursor: pointer;" onclick="window.location.href='{{ route('post', ['post' => $post->id, 'username' => $post->user->username]) }}'">
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-start">
             <div class="d-flex align-items-center">
@@ -26,6 +31,9 @@
                     </ul>
                 </div>
             @endif
+            <div class="text-muted small mb-2">
+                {{ $post->created_at->format('d/m/Y H:i') }}
+            </div>
         </div>
 
         <p class="mt-3 mb-2">{{ $post->body }}</p>
@@ -43,14 +51,39 @@
             </div>
         @endif
 
-        <div class="text-muted small mb-2">
-            Postado em {{ $post->created_at->format('d/m/Y H:i') }}
-        </div>
-
         <div class="d-flex justify-content-around mt-2 border-top pt-2">
             <button class="btn btn-sm text-muted"><i class="far fa-comment"></i> Comentar</button>
             <button class="btn btn-sm text-muted"><i class="far fa-heart"></i> Curtir</button>
-            <button class="btn btn-sm text-muted"><i class="fas fa-share"></i> Compartilhar</button>
+            <div class="dropdown">
+                <button class="btn btn-sm text-muted dropdown-toggle" data-bs-toggle="dropdown">
+                    <i class="fas fa-share"></i> Compartilhar
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                    <a class="dropdown-item" target="_blank"
+                        href="https://wa.me/?text={{ urlencode($url) }}">
+                        WhatsApp
+                    </a>
+                    </li>
+                    <li>
+                    <a class="dropdown-item" target="_blank"
+                        href="https://twitter.com/intent/tweet?url={{ urlencode($url) }}&text=Veja+esse+post!">
+                        Twitter
+                    </a>
+                    </li>
+                    <li>
+                    <a class="dropdown-item" target="_blank"
+                        href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($url) }}">
+                        Facebook
+                    </a>
+                    </li>
+                    <li>
+                    <a class="dropdown-item" onclick="copyToClipboard('{{ $url }}')">
+                        Copiar Link
+                    </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

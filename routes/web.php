@@ -51,7 +51,7 @@ Route::get('/sobre', [HomeController::class, 'about'])->name('about');
 // Rota para armazenar posts
 Route::post('/posts', [PostController::class, 'store'])->middleware(['auth', 'validate.post']);
 Route::resource('posts', PostController::class)->except(['index']);
-Route::get('/post/{id}', [PostController::class, 'show'])->name('post.show');
+Route::get('/post/{post}/{username}', [PostController::class, 'show'])->name('post');
 
 // Perfil público por username
 Route::get('/perfil/{identificador}', [ProfileController::class, 'show'])->name('profile.show');

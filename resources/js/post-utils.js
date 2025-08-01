@@ -152,3 +152,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+function compartilharPost(postId, username) {
+    const url = `${window.location.origin}/post/${postId}/${username.replace(/\s+/g, '-')}`;
+    if (navigator.share) {
+        navigator.share({
+            title: 'Veja esse post',
+            url: url
+        }).catch(console.error);
+    } else {
+        alert('Seu navegador não suporta compartilhamento nativo.');
+    }
+}
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(() => alert('Link copiado!'));
+}

@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('location', 100)->nullable()->after('bio');
             $table->string('website')->nullable()->after('location');
             $table->date('birthday')->nullable()->after('website');
-            $table->string('avatar')->nullable()->after('birthday'); // URL do avatar
+            $table->string('gender')->nullable()->after('birthday');
+            $table->string('avatar')->nullable()->after('gender');   // URL do avatar
             $table->string('banner')->nullable()->after('avatar');   // URL da capa
             $table->string('status')->nullable()->after('banner');   // status atual
             $table->timestamp('last_active_at')->nullable()->after('updated_at');
@@ -37,6 +38,7 @@ return new class extends Migration
                 'location',
                 'website',
                 'birthday',
+                'gender',
                 'avatar',
                 'banner',
                 'status',
