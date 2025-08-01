@@ -9,7 +9,7 @@
 
     <link rel="icon" href="images/logos-site-T.png" type="image/x-icon">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>@yield('title', 'TellOver')</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -17,6 +17,7 @@
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
     <!-- Bootstrap CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
@@ -24,11 +25,7 @@
     <!-- Select2 -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
-    <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-
-    <link rel="stylesheet" href="{{ asset('build/assets/app.css') }}">
-    @vite('resources/css/app.css')
+    @vite(['resources/css/app.css', 'resources/js/post-utils.js', 'resources/js/add-posts.js'])
 
 </head>
 <body>
@@ -36,7 +33,7 @@
         <!-- Barra de Navegação -->
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
+                <a class="navbar-brand" href="{{ url('home') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
 
@@ -64,23 +61,18 @@
                                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                                 </li>
                             @endif
-
                             @if (Route::has('register'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
+                            @if (Route::currentRouteName() === 'about')
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="{{ route('about') }}">Sobre o Tellover</a>
+                                </li>
+                            @endif
                         @else
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('personagem') }}">Personagens</a>
-                            </li>
-                            <li class="nav-item d-flex align-items-center ms-3 ">
-                                <!-- Exibir moedas com badge -->
-                                <img src="https://cdn.discordapp.com/emojis/1043372349484974131.png?size=2048" alt="Moeda" style="width: 24px; height: 24px;" class="me-1">
-                                <span class="">
-                                    {{ number_format(Auth::user()->tabs ?? 0, 0, ',', '.') }}
-                                </span>
-                            </li>
+                            @include('partials.notifications')
                         @endguest
                     </ul>
                 </div>
@@ -89,68 +81,88 @@
 
         <!-- Menu Offcanvas -->
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
-            <div class="offcanvas-header">
+            <div class="offcanvas-header border-bottom">
                 <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menu</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
             </div>
-            <div class="offcanvas-body">
-                <ul class="nav flex-column">
-                    @auth
-                        <li class="nav-item">
-                            <span class="nav-link">{{ Auth::user()->name }}</span>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('profile.show') }}">Perfil</a>
-                        </li>
-                        @if (Auth::user()->type == 2) <!-- Admin -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('admin.gerenciar_narradores') }}">Gerenciar Narradores</a>
-                            </li>
+            <div class="offcanvas-body px-3">
+                @auth
+                   <!-- Usuário logado -->
+                    <div class="d-flex align-items-center mb-3">
+                        @if(Auth::user()->avatar)
+                            <img src="{{ Auth::user()->avatar }}" alt="Avatar" class="rounded-circle" width="40">
+                        @else
+                            <i class="fas fa-user-circle fa-2x text-secondary"></i>
                         @endif
-                    @endauth
+
+                        <div class="ms-3">
+                            <strong>{{ Auth::user()->name }}</strong><br>
+                            <small class="text-muted">
+                                {{ Auth::user()->username ?: strtolower(str_replace(' ', '', Auth::user()->name)) }}
+                            </small>
+                        </div>
+                    </div>
+                @endauth
+
+                <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/') }}">Início</a>
+                        <a class="nav-link" href="{{ url('/') }}">
+                            <i class="fas fa-home me-2"></i> Início
+                        </a>
                     </li>
+
                     @auth
-                        <!-- Adicionar os links para novas páginas -->
-                        {{-- <li class="nav-item">
-                            <a class="nav-link" href="{{ route('bestiario.index') }}">Bestiário</a>
-                        </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('misson.index') }}">Gerenciador de Missões</a>
+                            <a class="nav-link" href="{{ route('profile.show', [
+                                'identificador' => Auth::user()->username
+                                    ?? strtolower(str_replace(' ', '', Auth::user()->name))
+                            ]) }}">
+                                <i class="fas fa-user-circle me-2"></i> Perfil
+                            </a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('calculadora.dano') }}">Calculadora de Dano</a>
+                            <a class="nav-link" href="{{ route('account.settings') }}">
+                                <i class="fas fa-cog me-2"></i> Configurações
+                            </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('calculadora.regras') }}">Regras RPG</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('personagem.selecao') }}">Entrar em Gukin</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('world.titlescreen') }}">Tela Inicial</a>
-                        </li> --}}
-                    @endauth
-                    @guest
-                        @if (Route::has('login'))
+
+                        @if (Auth::user()->role === 2) {{-- Admin --}}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">Entrar</a>
+                                <a class="nav-link" href="{{ route('admin.gerenciar_narradores') }}">
+                                    <i class="fas fa-users-cog me-2"></i> Administração
+                                </a>
                             </li>
                         @endif
 
-                        @if (Route::has('register'))
+                        <hr class="my-2">
+
+                        <li class="nav-item">
+                            <a class="nav-link text-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="fas fa-sign-out-alt me-2"></i> Sair
+                            </a>
+                        </li>
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    @endauth
+
+                    @guest
+                        @if (Route::has('login'))
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('register') }}">Registrar</a>
+                                <a class="nav-link" href="{{ route('login') }}">
+                                    <i class="fas fa-sign-in-alt me-2"></i> Entrar
+                                </a>
                             </li>
                         @endif
-                    @else
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('account.settings') }}">Configurações</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-outline-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sair</a>
-                        </li>
+                        @if (Route::has('register'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('register') }}">
+                                    <i class="fas fa-user-plus me-2"></i> Registrar
+                                </a>
+                            </li>
+                        @endif
                     @endguest
                 </ul>
             </div>
@@ -182,5 +194,8 @@
             @yield('content')
         </main>
     </div>
+
+    <!-- Bootstrap JS (essencial para o menu funcionar) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
