@@ -25,7 +25,7 @@
         <div class="col-md-6">
             @include('partials.post_modal')
             @include('partials.post_card', ['post' => $post])
-            @include('partials.comments', ['post' => $post])
+            {{-- @include('partials.comments', ['post' => $post]) --}}
         </div>
 
         <!-- Lateral Direita (Sugestões + Chat) -->
