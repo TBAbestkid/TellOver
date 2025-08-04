@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->nullable(); // Se quiser permitir post sem título
-            $table->text('body')->nullable();    // Pode ser nulo se for só imagem/vídeo
+            $table->string('title')->nullable();
+            $table->text('body')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
 
-            // Novos campos:
+            $table->foreignId('parent_id')->nullable()->constrained('posts')->onDelete('cascade'); // <- relação recursiva
+            $table->enum('type', ['post', 'comment', 'work'])->default('post'); // <- tipo de conteúdo
+
             $table->string('image_path')->nullable();
             $table->string('video_path')->nullable();
             $table->enum('visibility', ['public', 'private', 'followers'])->default('public');
