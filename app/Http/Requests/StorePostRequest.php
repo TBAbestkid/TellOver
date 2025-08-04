@@ -27,7 +27,8 @@ class StorePostRequest extends FormRequest
             'visibility' => 'required|in:public,friends,private',
             'images.*' => 'nullable|image|max:2048',
             'allow_comments' => 'sometimes|boolean',
+            'type' => 'sometimes|in:post,comment,work', // novo campo
+            'parent_id' => 'nullable|exists:posts,id', // se for comentário
         ];
-
     }
 }
