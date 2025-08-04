@@ -7,6 +7,9 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Notifications\ImportantAccountNotice;
+use App\Notifications\ChooseAccountTypeNotice;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -67,7 +70,17 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            // 'tabs' => 10000,
         ]);
+
+        // Dispara o evento para envio de e-mail de verificação
+        event(new Registered($user));
+
+        // Notificação de Verificação de Conta
+        // $user->notify(new ImportantAccountNotice());
+
+        // Notificação para Escolha do Tipo de Conta
+        $user->notify(new ChooseAccountTypeNotice());
+
+        return $user;
     }
 }
