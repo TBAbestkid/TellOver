@@ -1,45 +1,36 @@
-# Define a versão do Docker Compose que está sendo usada.
-# A versão 3.8 é bastante estável para a maioria dos casos.
-
 version: '3.8'
 
-# Define os serviços que serão executados no Docker.
-# Neste caso, temos dois serviços: app e db.
 services:
-  # Serviço da aplicação PHP (Laravel)
   app:
-    image: php:8.3-fpm  # Define a imagem que será usada para o serviço. Aqui, estamos usando o PHP 8.3 com FPM (FastCGI Process Manager).
-    container_name: laravel_app  # Define o nome do contêiner para facilitar a identificação.
-    working_dir: /var/www/html  # Define o diretório de trabalho dentro do contêiner. É onde o código da aplicação Laravel será armazenado.
+    build:
+      context: .          # Usa o Dockerfile do diretório atual
+    container_name: tellover_app
+    working_dir: /var/www/html
     volumes:
-      - .:/var/www/html  # Mapeia o diretório atual (.) da máquina local para o diretório de trabalho dentro do contêiner (/var/www/html).
-      # Isso garante que qualquer alteração feita nos arquivos do projeto na máquina local seja refletida no contêiner.
+      - .:/var/www/html
     networks:
-      - laravel  # Define que este serviço fará parte da rede chamada "laravel". Isso facilita a comunicação entre os serviços no Docker.
+      - tellover
+    depends_on:
+      - db
 
-  # Serviço do banco de dados MySQL
   db:
-    image: mysql:8.0  # Define a imagem do MySQL a ser utilizada. Estamos usando a versão 8.0.
-    container_name: laravel_db  # Nome do contêiner do banco de dados MySQL.
+    image: mysql:8.0
+    container_name: tellover_db
+    restart: unless-stopped
     ports:
-      - "3306:3306"  # Mapeia a porta 3306 do contêiner para a porta 3306 da máquina local. A porta 3306 é a porta padrão do MySQL.
-      # Isso permite que a aplicação Laravel acesse o MySQL na máquina local através dessa porta.
-    environment:  # Define variáveis de ambiente que serão usadas para configurar o MySQL.
-      MYSQL_ROOT_PASSWORD: root  # Define a senha do usuário root do MySQL.
-      MYSQL_DATABASE: sotakedom  # Define o nome do banco de dados a ser criado quando o MySQL iniciar.
-      MYSQL_USER: laravel  # Define o nome do usuário que o MySQL irá criar.
-      MYSQL_PASSWORD: 1234  # Define a senha do usuário "laravel".
-    networks:
-      - laravel  # Define que este serviço também estará na rede "laravel", permitindo a comunicação com o serviço "app".
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tellover
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: 1234
     volumes:
-      - dbdata:/var/lib/mysql  # Define um volume persistente para o MySQL. Isso mantém os dados do banco persistentes, mesmo que o contêiner seja removido.
-      # O volume é mapeado para o diretório do MySQL onde os dados são armazenados (/var/lib/mysql).
-      # O nome do volume é "dbdata", o que significa que os dados do banco de dados serão armazenados em um volume separado.
+      - dbdata:/var/lib/mysql
+    networks:
+      - tellover
 
-# Define as redes usadas pelos serviços. Nesse caso, criamos uma rede chamada "laravel" que conecta os dois serviços.
 networks:
-  laravel:  # A rede laravel é criada automaticamente. Os serviços podem se comunicar entre si através dessa rede.
+  tellover:
 
-# Define volumes persistentes para os dados do MySQL.
 volumes:
-  dbdata:  # O volume "dbdata" será usado para armazenar os dados do banco MySQL de forma persistente.
+  dbdata:
