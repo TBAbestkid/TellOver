@@ -22,8 +22,13 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function comments()
+    public function parent()
     {
-        return $this->hasMany(Comment::class);
+        return $this->belongsTo(Post::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Post::class, 'parent_id');
     }
 }
