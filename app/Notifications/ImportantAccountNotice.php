@@ -62,7 +62,7 @@ class ImportantAccountNotice extends Notification
     {
         return [
             'message' => "Verifique seu e-mail para ativar todos os recursos do Tellover.",
-            'link' => route('verification.notice'),
+            'link' => route('account.settings'),
         ];
     }
 
