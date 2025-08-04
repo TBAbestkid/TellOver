@@ -24,13 +24,13 @@ class PostController extends Controller
     public function show(Post $post, $username)
     {
         // Verifica se o username da URL bate com o autor do post
-        if ($post->user->name !== $username) {
-            abort(404);
-        }
+        // if ($post->user->name !== $username) {
+        //     abort(404);
+        // }
 
-        if (strtolower($post->user->name) !== strtolower($username)) {
-            abort(404);
-        }
+        // if (strtolower($post->user->name) !== strtolower($username)) {
+        //     abort(404);
+        // }
 
         return view('post', ['post' => $post,]);
     }
@@ -43,11 +43,16 @@ class PostController extends Controller
             if (!$user) {
                 return response()->json(['error' => 'Usuário não autenticado.'], 401);
             }
+
             $post = new Post();
             $post->user_id = $user->id;
             $post->body = $request->body;
             $post->visibility = $request->visibility;
             $post->allow_comments = $request->boolean('allow_comments', true); // true default
+
+            // novos campos
+            $post->type = $request->input('type', 'post'); // default é 'post'
+            $post->parent_id = $request->input('parent_id'); // pode ser null
 
             $post->save();
 
