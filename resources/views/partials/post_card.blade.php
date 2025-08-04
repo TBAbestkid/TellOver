@@ -1,9 +1,13 @@
 @php
-    $usernameSlug = Str::slug($post->user->name);
-    $url = route('post', ['post' => $post->id, 'username' => $usernameSlug]);
+    use Illuminate\Support\Str;
+
+    $user = $post->user;
+    $username = !empty($user->username) ? $user->username : Str::slug($user->name);
+    $url = route('post', ['post' => $post->id, 'username' => $username]);
 @endphp
-{{-- card clicavel --}}
-<div class="card mb-3 border-0 rounded-3" style="hover:cursor: pointer;" onclick="window.location.href='{{ route('post', ['post' => $post->id, 'username' => $post->user->username]) }}'">
+
+{{-- card clicável --}}
+<div class="card mb-3 border-0 rounded-3" style="cursor: pointer;" onclick="window.location.href='{{ $url }}'">
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-start">
             <div class="d-flex align-items-center">
