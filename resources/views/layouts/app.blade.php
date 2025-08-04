@@ -138,14 +138,11 @@
                         <hr class="my-2">
 
                         <li class="nav-item">
-                            <a class="nav-link text-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            {{-- chama o Modal de Logout --}}
+                            <a class="nav-link text-danger" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal" aria-label="Sair">
                                 <i class="fas fa-sign-out-alt me-2"></i> Sair
                             </a>
                         </li>
-
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
                     @endauth
 
                     @guest
